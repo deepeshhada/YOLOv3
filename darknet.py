@@ -57,7 +57,7 @@ class EmptyModule(nn.Module):
     def forward(self, x):
         return x
 
-# support route shortcut
+
 class Darknet(nn.Module):
     def __init__(self, cfgfile):
         super(Darknet, self).__init__()
@@ -114,6 +114,7 @@ class Darknet(nn.Module):
 
     def print_network(self):
         print_cfg(self.blocks)
+
 
     def create_network(self, blocks):
         models = nn.ModuleList()
@@ -193,6 +194,7 @@ class Darknet(nn.Module):
                 print('unknown type %s' % (block['type']))
     
         return models
+
 
     def load_weights(self, weightfile):
         print()
@@ -355,7 +357,6 @@ def parse_cfg(cfgfile):
 
 
 def print_cfg(blocks):
-    print('layer     filters    size              input                output');
     prev_width = 416
     prev_height = 416
     prev_filters = 3
