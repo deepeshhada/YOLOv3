@@ -50,3 +50,51 @@ def boxes_iou(box1, box2):
     
     return iou
 
+
+def nms(boxes, iou_thresh):
+    
+    # If there are no bounding boxes do nothing
+    if len(boxes) == 0:
+        return boxes
+    
+    # Create a PyTorch Tensor to keep track of the detection confidence
+    # of each predicted bounding box
+    det_confs = torch.zeros(len(boxes))
+    
+    # Get the detection confidence of each predicted bounding box
+    for i in range(len(boxes)):
+        det_confs[i] = boxes[i][4]
+
+    # Sort the indices of the bounding boxes by detection confidence value in descending order.
+    # We ignore the first returned element since we are only interested in the sorted indices
+    _,sortIds = torch.sort(det_confs, descending = True)
+    
+    # Create an empty list to hold the best bounding boxes after
+    # Non-Maximal Suppression (NMS) is performed
+    best_boxes = []
+    
+    # Perform Non-Maximal Suppression 
+    for i in range(len(boxes)):
+        
+        # Get the bounding box with the highest detection confidence first
+        box_i = boxes[sortIds[i]]
+        
+        # Check that the detection confidence is not zero
+        if box_i[4] > 0:
+            
+            # Save the bounding box 
+            best_boxes.append(box_i)
+            
+            # Go through the rest of the bounding boxes in the list and calculate their IOU with
+            # respect to the previous selected box_i. 
+            for j in range(i + 1, len(boxes)):
+                box_j = boxes[sortIds[j]]
+                
+                # If the IOU of box_i and box_j is higher than the given IOU threshold set
+                # box_j's detection confidence to zero. 
+                if boxes_iou(box_i, box_j) > iou_thresh:
+                    box_j[4] = 0
+                    
+    return best_boxes
+
+
