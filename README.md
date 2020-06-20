@@ -1,4 +1,4 @@
-# You Only look Once (YOLO) v3
+# You Only Look Once (YOLO) v3
 
 The repository contains code for object detection on the [MS COCO](http://cocodataset.org/#home) dataset using [YOLO v3](https://pjreddie.com/media/files/papers/YOLOv3.pdf). 
 
